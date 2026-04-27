@@ -38,13 +38,14 @@ public class Factura {
                 System.out.println("Precio Unitario: "+productos[i].getPrecioUnitario());
                 System.out.println("Descuento: "+productos[i].calcularDescuento());
                 System.out.printf("Total: %.2f",productos[i].calcularTotalProducto());
+                System.out.println(" ");
             }
         }
 
         System.out.println("------------------");
-        System.out.printf("Subtotal: %.2f",calcularSubtotalCompra());
-        System.out.printf("IVA: %.2f",calcularIVA());
-        System.out.printf("Total: %.2f",calcularTotalFinal());
+        System.out.printf("\nSubtotal: %.2f",calcularSubtotalCompra());
+        System.out.printf("\nIVA: %.2f",calcularIVA());
+        System.out.printf("\nTotal: %.2f",calcularTotalFinal());
 
     }
 }
