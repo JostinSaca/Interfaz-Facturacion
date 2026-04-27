@@ -27,8 +27,8 @@ public class VentanaSistema {
 
     public VentanaSistema() {
 
-        inventario = new Producto[3];
-        ventas = new Producto[3];
+        inventario = new Producto[5];
+        ventas = new Producto[5];
 
 
         crearProductoButton.addActionListener(e -> crearProducto());
@@ -38,7 +38,9 @@ public class VentanaSistema {
         venderButton.addActionListener(e -> venderProducto());
 
         imprimirFacturaButton.addActionListener(e -> imprimirFactura());
-
+        crearProductoButton.setFocusPainted(false);
+        verInventarioButton.setFocusPainted(false);
+        venderButton.setFocusPainted(false);
     }
 
 
@@ -46,6 +48,7 @@ public class VentanaSistema {
     public JPanel getPanelPrincipal(){
         return panelPrincipal;
     }
+
 
 
 
@@ -72,8 +75,7 @@ public class VentanaSistema {
         }
 
         catch(Exception e){
-            JOptionPane.showMessageDialog(null, "Datos inválidos"
-            );
+            JOptionPane.showMessageDialog(null, "Datos inválidos");
 
         }
 
@@ -117,8 +119,7 @@ public class VentanaSistema {
     private void venderProducto(){
 
         if(contInventario==0){
-            JOptionPane.showMessageDialog(null, "No hay productos"
-            );
+            JOptionPane.showMessageDialog(null, "No hay productos");
 
             return;
         }
@@ -135,9 +136,7 @@ public class VentanaSistema {
 
 
         JComboBox<String> combo=
-                new JComboBox<>(
-                        nombres
-                );
+                new JComboBox<>(nombres);
 
 
         JTextField txtVenta=
@@ -212,77 +211,57 @@ public class VentanaSistema {
     private void imprimirFactura(){
 
         if(contVentas==0){
-
-            areaSalida.setText(
-                    "No hay ventas."
-            );
-
+            areaSalida.setText("No hay ventas.");
             return;
+        }
 
+        Producto vendidos[]=
+                new Producto[contVentas];
+
+        for(int i=0;i<contVentas;i++){
+            vendidos[i]=ventas[i];
+        }
+
+        Factura factura=
+                new Factura(vendidos);
+
+        areaSalida.setText("FACTURA\n\n");
+
+        double subtotalBruto=0;
+        double descuentoTotal=0;
+
+
+        for(int i=0;i<contVentas;i++){
+
+            Producto p=ventas[i];
+
+            double bruto= p.calcularSubtotal();
+
+            double descuento= p.calcularDescuento();
+
+            double total= p.calcularTotalProducto();
+
+
+            subtotalBruto+=bruto;
+            descuentoTotal+=descuento;
+
+
+            areaSalida.append(p.getNombre() +" | Cant: " +p.getCantidad() +" | P.Unit: " +String.format("%.2f", p.getPrecioUnitario()) +" | Total: " +String.format("%.2f", total) +"\nDescuento: " +String.format("%.2f", descuento) +"\n");
         }
 
 
-
-        Producto vendidos[]=new Producto[contVentas];
-
-
-        for(int i=0; i<contVentas; i++){
-
-            vendidos[i]=
-                    ventas[i];
-
-        }
+        double subtotalNeto= subtotalBruto-descuentoTotal;
 
 
+        areaSalida.append("\nSubtotal bruto: " +String.format("%.2f", subtotalBruto));
 
-        Factura factura= new Factura(vendidos);
+        areaSalida.append("\nDescuentos: " +String.format("%.2f", descuentoTotal));
 
+        areaSalida.append("\nSubtotal neto: " +String.format("%.2f", subtotalNeto));
 
-        areaSalida.setText("");
+        areaSalida.append("\nIVA: " +String.format("%.2f", factura.calcularIVA()));
 
-
-
-        for(int i=0; i<contVentas; i++){
-
-            areaSalida.append(
-
-                    ventas[i]
-                            .getNombre()
-
-                            +" x"
-
-                            +ventas[i]
-                            .getCantidad()
-
-                            +" = "
-
-                            +ventas[i]
-                            .calcularTotalProducto()
-
-                            +"\n"
-
-            );
-
-        }
-
-
-        areaSalida.append(
-                "\nSubtotal: "
-                        +factura
-                        .calcularSubtotalCompra()
-        );
-
-        areaSalida.append(
-                "\nIVA: "
-                        +factura
-                        .calcularIVA()
-        );
-
-        areaSalida.append(
-                "\nTOTAL: "
-                        +factura
-                        .calcularTotalFinal()
-        );
+        areaSalida.append("\nTOTAL: " +String.format("%.2f", factura.calcularTotalFinal()));
 
     }
 
