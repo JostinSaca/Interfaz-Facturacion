@@ -41,6 +41,12 @@ public class VentanaSistema {
         crearProductoButton.setFocusPainted(false);
         verInventarioButton.setFocusPainted(false);
         venderButton.setFocusPainted(false);
+
+        crearProductoButton.setFocusPainted(false);
+        verInventarioButton.setFocusPainted(false);
+        venderButton.setFocusPainted(false);
+        imprimirFacturaButton.setFocusPainted(false);
+        panelPrincipal.setBorder(BorderFactory.createEmptyBorder(20,20,20,20));
     }
 
 
